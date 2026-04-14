@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Sadie Neuenschwander game page" />
+        <title>Game - Sadie Neuenschwander</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
+            <div class="container px-5">
+                <a class="navbar-brand" href="index.html" aria-label="Back to home"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="resume.html">Resume</a></li>
+                        <li class="nav-item"><a class="nav-link" href="scratch.html">Scratch</a></li>
+                        <li class="nav-item"><a class="nav-link" href="game.html">Game</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <header class="masthead text-center">
+            <div class="masthead-content">
+                <div class="container px-5">
+                    <h1 class="masthead-heading mb-0">Game</h1>
+                </div>
+            </div>
+        </header>
+        <section>
+            <div class="container px-5 pb-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-xl-10 col-12">
+                        <div class="p-5 bg-white rounded-4 shadow-sm game-panel">
+                            <div class="d-flex flex-column flex-md-row align-items-start justify-content-between mb-4 gap-3">
+                                <div>
+                                    <h2 class="display-6 mb-2">Everest Ski Run</h2>
+                                    <p class="mb-2">Use the side arrows to dodge trees and the up arrow to jump rocks. Press Start to begin the downhill run.</p>
+                                </div>
+                                <div class="game-stats text-md-end">
+                                    <div id="everest-timer" class="fw-bold">Time: 0.00s</div>
+                                    <button id="game-start-btn" class="game-start-button mt-2">Start Run</button>
+                                    <div id="everest-status" class="text-muted small mt-2">Press Start to begin your downhill run.</div>
+                                </div>
+                            </div>
+                            <div class="game-canvas-wrapper mb-3 position-relative">
+                                <canvas id="everest-game" width="760" height="520" aria-label="Mt Everest parkour game"></canvas>
+                                <div id="game-overlay" class="game-overlay d-none">
+                                    <div class="game-overlay-card">
+                                        <h3>Ouch!</h3>
+                                        <p>You hit an obstacle. Click restart to try again.</p>
+                                        <button id="overlay-restart-btn" class="game-start-button">Restart</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap gap-3 align-items-center game-controls">
+                                <span>Controls:</span>
+                                <span class="badge bg-dark">← / → steer</span>
+                                <span class="badge bg-dark">↑ jump</span>
+                                <span class="badge bg-dark">hit obstacle = restart</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="text-center py-3">
+            <a class="back-to-top" href="#page-top">Back to top</a>
+        </div>
+        <footer class="py-5 bg-black">
+            <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; Sadie Neuenschwander 2026</p></div>
+        </footer>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
