@@ -4,29 +4,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ski Planning | Scratch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --snow: #f5fbff;
+            --ice: #d6edf8;
+            --sky: #7eb9da;
+            --pine: #1f4d4f;
+            --charcoal: #1f2c38;
+            --accent: #3a7ca5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Playfair Display", serif;
+            background: linear-gradient(180deg, var(--snow) 0%, #e8f4fb 45%, #d7ebf7 100%);
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+
+        .menu {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(245, 251, 255, 0.96);
+            border-bottom: 1px solid rgba(31, 77, 79, 0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .menu ul {
+            margin: 0;
+            padding: 0.9rem 1.1rem;
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.85rem;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: var(--pine);
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            padding: 0.5rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid rgba(31, 77, 79, 0.28);
+            background: #ffffff;
+        }
+
+        .menu a:hover {
+            background: #e4f2fb;
+        }
+
+        header {
+            padding: 4rem 1.2rem 3.2rem;
+            text-align: center;
+            background: linear-gradient(160deg, rgba(31, 77, 79, 0.9) 0%, rgba(58, 124, 165, 0.88) 60%, rgba(126, 185, 218, 0.9) 100%);
+            color: #ffffff;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 6vw, 3.4rem);
+            letter-spacing: 0.04em;
+        }
+
+        header p {
+            margin: 0.8rem auto 0;
+            max-width: 42rem;
+            font-size: 1.1rem;
+        }
+
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 2rem 1.1rem 3rem;
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(31, 77, 79, 0.18);
+            border-radius: 20px;
+            padding: 1.3rem 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--pine);
+        }
+
+        .tableauPlaceholder {
+            width: 100%;
+        }
+
+        .tableauPlaceholder object {
+            width: 100%;
+            min-height: 520px;
+        }
+
+        ol {
+            padding-left: 1.3rem;
+        }
+
+        ul {
+            margin-top: 0.35rem;
+        }
+
+        iframe {
+            width: 100%;
+            max-width: 100%;
+            aspect-ratio: 16 / 9;
+            height: auto;
+            border: 0;
+            border-radius: 14px;
+        }
+
+        .back-wrap {
+            text-align: center;
+            margin-top: 1.2rem;
+        }
+
+        .back-top {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            background: var(--accent);
+            border-radius: 999px;
+            padding: 0.7rem 1.15rem;
+            font-weight: 700;
+        }
+    </style>
 </head>
 
-<body>
-    <h1>Tableau</h1>
-    <div class='tableauPlaceholder' id='viz1776193531468' style='position: relative'><noscript><a href='#'><img alt=' '
+<body id="page-top">
+    <nav class="menu" aria-label="Main menu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="scratch.html">Scratch</a></li>
+            <li><a href="game.html">Game</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Skiing in Europe</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Tableau: Cheapest Countries for Skiing</h2>
+            <div class='tableauPlaceholder' id='viz1776193531468' style='position: relative'><noscript><a href='#'><img alt=' '
                     src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;KG&#47;KG2G3G87Q&#47;1_rss.png'
                     style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'>
-            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-            <param name='embed_code_version' value='3' />
-            <param name='path' value='shared&#47;KG2G3G87Q' />
-            <param name='toolbar' value='yes' />
-            <param name='static_image'
-                value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;KG&#47;KG2G3G87Q&#47;1.png' />
-            <param name='animate_transition' value='yes' />
-            <param name='display_static_image' value='yes' />
-            <param name='display_spinner' value='yes' />
-            <param name='display_overlay' value='yes' />
-            <param name='display_count' value='yes' />
-            <param name='language' value='en-US' />
-        </object></div>
-    <script
-        type='text/javascript'>                    var divElement = document.getElementById('viz1776193531468'); var vizElement = divElement.getElementsByTagName('object')[0]; vizElement.style.width = '100%'; vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px'; var scriptElement = document.createElement('script'); scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js'; vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                    <param name='embed_code_version' value='3' />
+                    <param name='path' value='shared&#47;KG2G3G87Q' />
+                    <param name='toolbar' value='yes' />
+                    <param name='static_image'
+                        value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;KG&#47;KG2G3G87Q&#47;1.png' />
+                    <param name='animate_transition' value='yes' />
+                    <param name='display_static_image' value='yes' />
+                    <param name='display_spinner' value='yes' />
+                    <param name='display_overlay' value='yes' />
+                    <param name='display_count' value='yes' />
+                    <param name='language' value='en-US' />
+                </object></div>
+            <script
+                type='text/javascript'>                    var divElement = document.getElementById('viz1776193531468'); var vizElement = divElement.getElementsByTagName('object')[0]; vizElement.style.width = '100%'; vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px'; var scriptElement = document.createElement('script'); scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js'; vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+        </section>
+
+        <section>
+            <h2>Top 5 Cheapest Ski Destinations in Europe:</h2>
+            <ol>
+                <li>
+                    Bulgaria
+                    <ul>
+                        <li>Bansko</li>
+                        <li>Borovets</li>
+                        <li>Pamporovo</li>
+                    </ul>
+                </li>
+                <li>
+                    Bosnia and Herzegovina
+                    <ul>
+                        <li>Jahorina</li>
+                        <li>Bjelasnica</li>
+                        <li>Kupres</li>
+                    </ul>
+                </li>
+                <li>
+                    Romania
+                    <ul>
+                        <li>Poiana Brasov</li>
+                        <li>Sinaia</li>
+                        <li>Straja</li>
+                    </ul>
+                </li>
+                <li>
+                    Slovakia
+                    <ul>
+                        <li>Jasna</li>
+                        <li>Tatranska Lomnica</li>
+                        <li>Strbske Pleso</li>
+                    </ul>
+                </li>
+                <li>
+                    Poland
+                    <ul>
+                        <li>Zakopane</li>
+                        <li>Szczyrk</li>
+                        <li>Bialka Tatrzanska</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>The Ultimate Ski Run</h2>
+            <iframe src="https://www.youtube.com/embed/fbqHK8i-HdA?si=lS9ke9YL-57JQLCt"
+                title="Ski inspiration video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </section>
+
+        <div class="back-wrap">
+            <a class="back-top" href="#page-top">Back to Top</a>
+        </div>
+    </main>
 </body>
 
 </html>

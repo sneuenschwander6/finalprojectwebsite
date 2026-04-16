@@ -7,8 +7,408 @@
         <title>Game - Sadie Neuenschwander</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            #game-wrap,
+            #game-wrap * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            #game-wrap {
+                width: 100%;
+                max-width: 860px;
+                padding: 16px;
+                margin: 0 auto;
+                font-family: "Segoe UI", system-ui, sans-serif;
+                background: #0d1b2a;
+                color: #fff;
+                border-radius: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            #title-bar {
+                text-align: center;
+                padding: 18px 0 10px;
+            }
+
+            #title-bar h1 {
+                font-size: 32px;
+                font-weight: 800;
+                letter-spacing: 2px;
+                color: #fff;
+                text-transform: uppercase;
+            }
+
+            #title-bar h1 span {
+                color: #4fc3f7;
+            }
+
+            #title-bar p {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+                margin-top: 4px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            #mountain-canvas {
+                width: 100%;
+                height: 220px;
+                border-radius: 16px;
+                overflow: hidden;
+                position: relative;
+                background: #1a3a5c;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                margin-bottom: 14px;
+            }
+
+            #ski-canvas {
+                width: 100%;
+                height: 220px;
+                display: block;
+            }
+
+            #stats-row {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 14px;
+            }
+
+            .stat-box {
+                flex: 1;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                padding: 10px 14px;
+                text-align: center;
+            }
+
+            .stat-box .label {
+                font-size: 11px;
+                color: rgba(255, 255, 255, 0.45);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 4px;
+            }
+
+            .stat-box .val {
+                font-size: 22px;
+                font-weight: 700;
+                color: #fff;
+            }
+
+            .stat-box .val.gold {
+                color: #ffd700;
+            }
+
+            .stat-box .val.blue {
+                color: #4fc3f7;
+            }
+
+            .stat-box .val.green {
+                color: #66bb6a;
+            }
+
+            #progress-wrap {
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 50px;
+                height: 10px;
+                margin-bottom: 14px;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            #progress-bar {
+                height: 100%;
+                width: 0%;
+                background: linear-gradient(90deg, #29b6f6, #4fc3f7);
+                border-radius: 50px;
+                transition: width 0.1s linear;
+            }
+
+            #text-display {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                padding: 20px 24px;
+                margin-bottom: 12px;
+                font-size: 18px;
+                line-height: 1.9;
+                letter-spacing: 0.3px;
+                min-height: 96px;
+                font-family: "Courier New", monospace;
+                white-space: normal;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+
+            .char-done {
+                color: #66bb6a;
+            }
+
+            .char-wrong {
+                color: #ef5350;
+                background: rgba(239, 83, 80, 0.18);
+                border-radius: 2px;
+            }
+
+            .char-current {
+                color: #fff;
+                border-bottom: 2px solid #4fc3f7;
+                animation: blink 0.8s infinite;
+            }
+
+            .char-pending {
+                color: rgba(255, 255, 255, 0.35);
+            }
+
+            @keyframes blink {
+                0%,
+                100% {
+                    border-color: #4fc3f7;
+                }
+
+                50% {
+                    border-color: transparent;
+                }
+            }
+
+            #type-input {
+                width: 100%;
+                padding: 14px 18px;
+                font-size: 16px;
+                border-radius: 10px;
+                border: 1.5px solid rgba(255, 255, 255, 0.15);
+                background: rgba(255, 255, 255, 0.07);
+                color: #fff;
+                outline: none;
+                font-family: "Courier New", monospace;
+                letter-spacing: 0.3px;
+                margin-bottom: 14px;
+                transition: border-color 0.2s;
+            }
+
+            #type-input:focus {
+                border-color: #4fc3f7;
+            }
+
+            #type-input::placeholder {
+                color: rgba(255, 255, 255, 0.25);
+            }
+
+            #type-input:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+
+            #btn-row {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 18px;
+            }
+
+            #btn-start,
+            #btn-next {
+                flex: 1;
+                padding: 13px;
+                font-size: 15px;
+                font-weight: 700;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: all 0.15s;
+            }
+
+            #btn-start {
+                background: #4fc3f7;
+                color: #0d1b2a;
+            }
+
+            #btn-start:hover {
+                background: #81d4fa;
+            }
+
+            #btn-next {
+                background: rgba(255, 255, 255, 0.08);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+            }
+
+            #btn-next:hover {
+                background: rgba(255, 255, 255, 0.14);
+            }
+
+            #btn-next:disabled {
+                opacity: 0.3;
+                cursor: not-allowed;
+            }
+
+            #leaderboard {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                padding: 16px 20px;
+            }
+
+            #leaderboard h3 {
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: rgba(255, 255, 255, 0.45);
+                margin-bottom: 12px;
+            }
+
+            #lb-list {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .lb-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 12px;
+                background: rgba(255, 255, 255, 0.04);
+                border-radius: 8px;
+                border: 1px solid rgba(255, 255, 255, 0.06);
+            }
+
+            .lb-rank {
+                font-size: 12px;
+                font-weight: 700;
+                width: 22px;
+                color: rgba(255, 255, 255, 0.35);
+            }
+
+            .lb-rank.gold {
+                color: #ffd700;
+            }
+
+            .lb-rank.silver {
+                color: #cfd8dc;
+            }
+
+            .lb-rank.bronze {
+                color: #a1887f;
+            }
+
+            .lb-time {
+                font-size: 15px;
+                font-weight: 700;
+                color: #4fc3f7;
+                min-width: 64px;
+            }
+
+            .lb-wpm {
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.5);
+                margin-left: auto;
+            }
+
+            .lb-acc {
+                font-size: 12px;
+                color: #66bb6a;
+            }
+
+            .lb-new {
+                font-size: 10px;
+                background: #ffd700;
+                color: #000;
+                border-radius: 4px;
+                padding: 2px 5px;
+                font-weight: 700;
+                margin-left: 4px;
+            }
+
+            #finish-overlay {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(13, 27, 42, 0.85);
+                border-radius: 16px;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 8px;
+                z-index: 10;
+            }
+
+            #finish-overlay.show {
+                display: flex;
+            }
+
+            #finish-overlay h2 {
+                font-size: 28px;
+                font-weight: 800;
+                color: #ffd700;
+                letter-spacing: 2px;
+            }
+
+            #finish-overlay .f-time {
+                font-size: 42px;
+                font-weight: 900;
+                color: #fff;
+            }
+
+            #finish-overlay .f-sub {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            #finish-overlay .f-record {
+                font-size: 13px;
+                color: #ffd700;
+                font-weight: 700;
+                letter-spacing: 1px;
+            }
+
+            #speed-indicator {
+                position: absolute;
+                top: 12px;
+                right: 16px;
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 8px;
+                padding: 6px 12px;
+                font-size: 12px;
+                font-weight: 700;
+                color: #4fc3f7;
+                letter-spacing: 1px;
+                border: 1px solid rgba(79, 195, 247, 0.3);
+            }
+
+            #wpm-live {
+                position: absolute;
+                top: 12px;
+                left: 16px;
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 8px;
+                padding: 6px 12px;
+                font-size: 12px;
+                font-weight: 700;
+                color: #66bb6a;
+                letter-spacing: 1px;
+                border: 1px solid rgba(102, 187, 106, 0.3);
+            }
+
+            @media (max-width: 768px) {
+                #stats-row {
+                    flex-wrap: wrap;
+                }
+
+                .stat-box {
+                    min-width: calc(50% - 5px);
+                }
+            }
+        </style>
     </head>
     <body id="page-top">
         <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
@@ -28,47 +428,776 @@
         <header class="masthead text-center">
             <div class="masthead-content">
                 <div class="container px-5">
-                    <h1 class="masthead-heading mb-0">Game</h1>
+                    <h1 class="masthead-heading mb-0">Typing Game</h1>
                 </div>
             </div>
         </header>
-        <section>
+        <section class="pt-4">
             <div class="container px-5 pb-5">
                 <div class="row gx-5 justify-content-center">
                     <div class="col-xl-10 col-12">
-                        <div class="p-5 bg-white rounded-4 shadow-sm game-panel">
-                            <div class="d-flex flex-column flex-md-row align-items-start justify-content-between mb-4 gap-3">
-                                <div>
-                                    <h2 class="display-6 mb-2">Everest Ski Run</h2>
-                                    <p class="mb-2">Use the side arrows to dodge trees and the up arrow to jump rocks. Press Start to begin the downhill run.</p>
-                                </div>
-                                <div class="game-stats text-md-end">
-                                    <div id="everest-timer" class="fw-bold">Time: 0.00s</div>
-                                    <button id="game-start-btn" class="game-start-button mt-2">Start Run</button>
-                                    <div id="everest-status" class="text-muted small mt-2">Press Start to begin your downhill run.</div>
+                        <div id="game-wrap">
+                            <div id="title-bar">
+                                <h1>Summit <span>Type</span></h1>
+                                <p>Type faster. Ski faster. Beat your record.</p>
+                            </div>
+
+                            <div id="mountain-canvas">
+                                <canvas id="ski-canvas"></canvas>
+                                <div id="speed-indicator">SPEED: <span id="ski-speed-val">0</span> mph</div>
+                                <div id="wpm-live">WPM: <span id="wpm-val">0</span></div>
+                                <div id="finish-overlay">
+                                    <div class="f-sub">RUN COMPLETE</div>
+                                    <h2>FINISH!</h2>
+                                    <div class="f-time" id="f-time-val">0.00s</div>
+                                    <div class="f-sub" id="f-wpm-val">0 WPM &nbsp;|&nbsp; 0% accuracy</div>
+                                    <div class="f-record" id="f-record-msg"></div>
                                 </div>
                             </div>
-                            <div class="game-canvas-wrapper mb-3 position-relative">
-                                <canvas id="everest-game" width="760" height="520" aria-label="Mt Everest parkour game"></canvas>
-                                <div id="game-overlay" class="game-overlay d-none">
-                                    <div class="game-overlay-card">
-                                        <h3>Ouch!</h3>
-                                        <p>You hit an obstacle. Click restart to try again.</p>
-                                        <button id="overlay-restart-btn" class="game-start-button">Restart</button>
-                                    </div>
+
+                            <div id="stats-row">
+                                <div class="stat-box">
+                                    <div class="label">Record</div>
+                                    <div class="val gold" id="stat-record">--</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="label">Last Run</div>
+                                    <div class="val blue" id="stat-last">--</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="label">WPM</div>
+                                    <div class="val green" id="stat-wpm">--</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="label">Accuracy</div>
+                                    <div class="val" id="stat-acc">--</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="label">Runs</div>
+                                    <div class="val" id="stat-runs">0</div>
                                 </div>
                             </div>
-                            <div class="d-flex flex-wrap gap-3 align-items-center game-controls">
-                                <span>Controls:</span>
-                                <span class="badge bg-dark">← / → steer</span>
-                                <span class="badge bg-dark">↑ jump</span>
-                                <span class="badge bg-dark">hit obstacle = restart</span>
+
+                            <div id="progress-wrap"><div id="progress-bar"></div></div>
+
+                            <div id="text-display"></div>
+
+                            <input type="text" id="type-input" placeholder="Press Start then type here..." disabled autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+                            <div id="btn-row">
+                                <button id="btn-start">Start Run</button>
+                                <button id="btn-next" disabled>New Prompt</button>
+                            </div>
+
+                            <div id="leaderboard">
+                                <h3>Personal Best Times</h3>
+                                <div id="lb-list"><div style="color: rgba(255,255,255,0.25); font-size: 13px; padding: 8px 4px;">No runs yet. Hit Start to begin!</div></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <script>
+            const PROMPTS = [
+                "The snow was perfect powder as the skier launched off the massive cliff sending a cascade of white crystals into the crisp mountain air.",
+                "Carving clean arcs down the steep groomed run the racer leaned hard into every gate pushing the limits of speed and precision.",
+                "Fresh tracks in untracked backcountry powder are the reward for those willing to hike the extra mile above the crowded resort.",
+                "The summit ridge offered a breathtaking panorama of jagged peaks draped in white stretching endlessly toward the pale winter horizon.",
+                "Skiing through a dense aspen grove requires quick reflexes and total commitment to the fall line as trees blur past on both sides.",
+                "After a heavy overnight storm the mountain transformed into a paradise of deep light fluffy snow that swallowed your skis whole.",
+                "The halfpipe walls rose twelve feet above the skater as he dropped in with full speed twisting into a perfect cork seven.",
+                "Wax the bases sharpen the edges buckle the boots and point them downhill because the mountain is waiting for no one today.",
+                "Racing the setting sun to the bottom of the last run the skier carved aggressive turns as long shadows stretched across the slope.",
+                "Mogul skiing demands rhythm and timing as the bumps come fast punishing any hesitation with a sudden loss of control and speed."
+            ];
+
+            const canvas = document.getElementById("ski-canvas");
+            const ctx = canvas.getContext("2d");
+            const W = () => canvas.width;
+            const H = () => canvas.height;
+            const slopeY = (x) => {
+                const h = H();
+                const w = W();
+                const t = Math.max(0, Math.min(1, x / Math.max(1, w)));
+                return h * 0.46 + t * h * 0.28 + Math.sin(t * Math.PI * 1.1) * 6;
+            };
+
+            function resizeCanvas() {
+                const parent = canvas.parentElement;
+                canvas.width = parent.clientWidth;
+                canvas.height = parent.clientHeight;
+            }
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
+
+            let records = JSON.parse(localStorage.getItem("skitype_records") || "[]");
+            records = records.sort((a, b) => a.time - b.time).slice(0, 3);
+            localStorage.setItem("skitype_records", JSON.stringify(records));
+            let totalRuns = parseInt(localStorage.getItem("skitype_runs") || "0", 10);
+
+            let gameActive = false;
+            let startTime = 0;
+            let currentPrompt = "";
+            let typedIndex = 0;
+            let errors = 0;
+            let totalTyped = 0;
+            let skiPos = 0;
+            let targetSkiPos = 0;
+            let skiSpeed = 0;
+            let skiAirY = 0;
+            let skiAirVel = 0;
+            let finished = false;
+            let snowParticles = [];
+            let skiWobble = 0;
+            let skiWobbleDir = 1;
+            let frameId = null;
+            let lastTimestamp = 0;
+            let wpmInterval = null;
+            let liveWpm = 0;
+            let trees = [];
+            let flagX = 0;
+            let finishParticles = [];
+            let skiLean = 0;
+            let lastPos = 0;
+            let trailPoints = [];
+
+            function initSnow() {
+                snowParticles = [];
+                for (let i = 0; i < 80; i++) {
+                    snowParticles.push({
+                        x: Math.random() * 900,
+                        y: Math.random() * 220,
+                        r: Math.random() * 2.2 + 0.4,
+                        vx: Math.random() * 0.4 - 0.2,
+                        vy: Math.random() * 0.8 + 0.3,
+                        op: Math.random() * 0.6 + 0.3
+                    });
+                }
+            }
+
+            function initTrees() {
+                trees = [];
+                const w = W();
+                for (let i = 0; i < 14; i++) {
+                    const side = i % 2 === 0 ? "uphill" : "downhill";
+                    trees.push({
+                        x: 30 + i * (w / 13),
+                        side,
+                        yOffset: Math.random() * 16 - 8,
+                        scale: 0.55 + Math.random() * 0.5,
+                        type: Math.random() < 0.7 ? "pine" : "spruce"
+                    });
+                }
+                flagX = W() - 30;
+            }
+
+            function drawMountainBg() {
+                const w = W();
+                const h = H();
+                ctx.fillStyle = "#0d2137";
+                ctx.fillRect(0, 0, w, h);
+
+                const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.55);
+                skyGrad.addColorStop(0, "#0a1929");
+                skyGrad.addColorStop(1, "#1a3a5c");
+                ctx.fillStyle = skyGrad;
+                ctx.fillRect(0, 0, w, h * 0.55);
+
+                ctx.fillStyle = "rgba(200,220,255,0.07)";
+                for (let i = 0; i < 6; i++) {
+                    ctx.beginPath();
+                    const bx = 60 + i * 130;
+                    const by = 20 + (i % 2) * 15;
+                    ctx.ellipse(bx, by, 50 + i * 8, 18 + i * 3, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.fillStyle = "rgba(150,190,230,0.12)";
+                ctx.beginPath();
+                ctx.moveTo(0, h * 0.38);
+                ctx.bezierCurveTo(w * 0.15, h * 0.22, w * 0.35, h * 0.32, w * 0.5, h * 0.18);
+                ctx.bezierCurveTo(w * 0.65, h * 0.08, w * 0.82, h * 0.26, w, h * 0.22);
+                ctx.lineTo(w, h * 0.55);
+                ctx.lineTo(0, h * 0.55);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = "rgba(200,225,250,0.15)";
+                ctx.beginPath();
+                ctx.moveTo(0, h * 0.45);
+                ctx.bezierCurveTo(w * 0.2, h * 0.3, w * 0.4, h * 0.42, w * 0.6, h * 0.28);
+                ctx.bezierCurveTo(w * 0.75, h * 0.18, w * 0.9, h * 0.35, w, h * 0.3);
+                ctx.lineTo(w, h * 0.55);
+                ctx.lineTo(0, h * 0.55);
+                ctx.closePath();
+                ctx.fill();
+
+                const snowGrad = ctx.createLinearGradient(0, h * 0.42, 0, h);
+                snowGrad.addColorStop(0, "#c8dff0");
+                snowGrad.addColorStop(0.3, "#ddeeff");
+                snowGrad.addColorStop(1, "#eef6ff");
+                ctx.fillStyle = snowGrad;
+                ctx.beginPath();
+                ctx.moveTo(0, slopeY(0) - 8);
+                ctx.lineTo(w, slopeY(w) + 8);
+                ctx.lineTo(w, h);
+                ctx.lineTo(0, h);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = "rgba(150,190,230,0.15)";
+                ctx.beginPath();
+                ctx.moveTo(0, slopeY(0) + 6);
+                for (let x = 0; x <= w; x += 18) {
+                    ctx.lineTo(x, slopeY(x) + Math.sin(x * 0.03) * 3 + 6);
+                }
+                ctx.lineTo(w, h);
+                ctx.lineTo(0, h);
+                ctx.closePath();
+                ctx.fill();
+
+                for (let i = 1; i < 5; i++) {
+                    ctx.strokeStyle = `rgba(140,180,220,${0.08 + i * 0.03})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(0, slopeY(0) + i * 16);
+                    for (let x = 0; x <= w; x += 12) {
+                        ctx.lineTo(x, slopeY(x) + i * 16 + Math.sin(x * 0.04 + i) * 2);
+                    }
+                    ctx.stroke();
+                }
+            }
+
+            function drawTree(t) {
+                const tx = t.x;
+                const s = t.scale;
+                const baseY = slopeY(tx);
+                const ty = baseY + (t.side === "uphill" ? -14 : -2) + t.yOffset;
+
+                ctx.save();
+                ctx.translate(tx, ty);
+
+                ctx.fillStyle = "#4a2e10";
+                ctx.fillRect(-3 * s, 0, 6 * s, 18 * s);
+
+                if (t.type === "spruce") {
+                    const layers = 4;
+                    for (let i = 0; i < layers; i++) {
+                        const ly = -(i * 13 + 6) * s;
+                        const lw = (20 - i * 3.5) * s;
+                        ctx.fillStyle = i % 2 === 0 ? "#1b5e20" : "#2e7d32";
+                        ctx.beginPath();
+                        ctx.moveTo(0, ly - 14 * s);
+                        ctx.lineTo(-lw, ly + 2 * s);
+                        ctx.lineTo(lw, ly + 2 * s);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.fillStyle = "rgba(230,245,255,0.75)";
+                        ctx.beginPath();
+                        ctx.moveTo(-lw * 0.25, ly - 3 * s);
+                        ctx.lineTo(-lw * 0.9, ly + 2 * s);
+                        ctx.lineTo(-lw * 0.45, ly + 2 * s);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.moveTo(lw * 0.25, ly - 3 * s);
+                        ctx.lineTo(lw * 0.9, ly + 2 * s);
+                        ctx.lineTo(lw * 0.45, ly + 2 * s);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                } else {
+                    const layers = 3;
+                    for (let i = 0; i < layers; i++) {
+                        const ly = -(i * 16 + 8) * s;
+                        const lw = (24 - i * 5) * s;
+                        ctx.fillStyle = i === 0 ? "#1a5726" : i === 1 ? "#215e2e" : "#276635";
+                        ctx.beginPath();
+                        ctx.moveTo(0, ly - 18 * s);
+                        ctx.lineTo(-lw, ly);
+                        ctx.lineTo(lw, ly);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.fillStyle = "rgba(240,250,255,0.7)";
+                        ctx.beginPath();
+                        ctx.moveTo(-lw * 0.2, ly - 5 * s);
+                        ctx.lineTo(-lw, ly);
+                        ctx.lineTo(-lw * 0.5, ly);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.moveTo(lw * 0.2, ly - 5 * s);
+                        ctx.lineTo(lw, ly);
+                        ctx.lineTo(lw * 0.5, ly);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                }
+                ctx.restore();
+            }
+
+            function drawFlag(x) {
+                const gy = slopeY(x) - 4;
+                ctx.save();
+                ctx.translate(x, gy);
+
+                for (let i = 0; i < 3; i++) {
+                    const bx = -18 + i * 18;
+                    ctx.strokeStyle = "rgba(255,0,0,0.8)";
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(bx, -2);
+                    ctx.lineTo(bx, -28);
+                    ctx.stroke();
+                    ctx.fillStyle = i % 2 === 0 ? "#f44336" : "#ffffff";
+                    ctx.fillRect(bx, -28, 16, 14);
+                }
+                ctx.fillStyle = "rgba(255,200,0,0.9)";
+                ctx.font = "bold 11px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("FINISH", 0, -36);
+                ctx.restore();
+            }
+
+            function drawSkier(x, groundY, lean, airY) {
+                const sy = groundY + airY;
+                ctx.save();
+                ctx.translate(x, sy);
+                ctx.rotate(lean * 0.14);
+
+                if (Math.abs(airY) > 2) {
+                    ctx.save();
+                    ctx.globalAlpha = 0.15;
+                    for (let i = 1; i <= 4; i++) {
+                        ctx.fillStyle = "#4fc3f7";
+                        ctx.beginPath();
+                        ctx.ellipse(-i * 7, 0, 4, 2, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+
+                // Shadow
+                ctx.fillStyle = "rgba(0,0,0,0.12)";
+                ctx.beginPath();
+                ctx.ellipse(4, 14, 17, 5, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Side-profile torso
+                const bodyGrad = ctx.createLinearGradient(-8, -14, 14, -2);
+                bodyGrad.addColorStop(0, "#0d47a1");
+                bodyGrad.addColorStop(1, "#1565c0");
+                ctx.fillStyle = bodyGrad;
+                ctx.beginPath();
+                ctx.ellipse(2, -4, 9, 13, -0.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Jacket stripe
+                ctx.fillStyle = "#ef5350";
+                ctx.beginPath();
+                ctx.ellipse(6, -5, 3.5, 6.5, -0.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Head + beanie
+                ctx.fillStyle = "#ffcc80";
+                ctx.beginPath();
+                ctx.arc(3, -19, 7, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#e53935";
+                ctx.beginPath();
+                ctx.arc(3, -21, 7.5, Math.PI, 0);
+                ctx.fill();
+                ctx.fillRect(-4.5, -21, 15, 4);
+
+                // Goggles (side profile)
+                ctx.fillStyle = "rgba(30,30,30,0.85)";
+                ctx.beginPath();
+                ctx.ellipse(6, -18.5, 4.3, 3, 0.05, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "rgba(79,195,247,0.55)";
+                ctx.beginPath();
+                ctx.ellipse(6, -18.5, 3.1, 1.9, 0.05, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Poles
+                ctx.strokeStyle = "#90a4ae";
+                ctx.lineWidth = 1.8;
+                ctx.lineCap = "round";
+                const pa = lean * 0.25;
+                ctx.beginPath();
+                ctx.moveTo(-5, -6);
+                ctx.lineTo(-14 + pa * 4, 11);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(8, -6);
+                ctx.lineTo(18 + pa * 4, 10);
+                ctx.stroke();
+                ctx.fillStyle = "#607d8b";
+                ctx.beginPath();
+                ctx.arc(-14 + pa * 4, 11, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(18 + pa * 4, 10, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Two distinct skis (side profile), clearly separated.
+                const skiY = 16;
+                const leftSkiX = -18;
+                const rightSkiX = -2;
+                const skiLen = 44;
+                const skiTilt = lean * 2;
+                ctx.strokeStyle = "#d32f2f";
+                ctx.lineWidth = 3.4;
+                ctx.lineCap = "round";
+                ctx.beginPath();
+                ctx.moveTo(leftSkiX, skiY + 2);
+                ctx.quadraticCurveTo(leftSkiX + skiLen - 7, skiY + 2 + skiTilt, leftSkiX + skiLen, skiY - 2 + skiTilt);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(rightSkiX, skiY);
+                ctx.quadraticCurveTo(rightSkiX + skiLen - 7, skiY + skiTilt, rightSkiX + skiLen, skiY - 4 + skiTilt);
+                ctx.stroke();
+
+                // Boots/bindings
+                ctx.fillStyle = "#1e88e5";
+                ctx.fillRect(-11, 8, 6, 4);
+                ctx.fillRect(5, 8, 6, 4);
+
+                ctx.restore();
+            }
+
+            function drawTrail(points) {
+                if (points.length < 2) {
+                    return;
+                }
+                ctx.save();
+                ctx.strokeStyle = "rgba(200,230,255,0.35)";
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+                ctx.setLineDash([4, 6]);
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.strokeStyle = "rgba(150,200,240,0.15)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(points[0].x - 6, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x - 6, points[i].y);
+                }
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(points[0].x + 6, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x + 6, points[i].y);
+                }
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            function drawSnow() {
+                snowParticles.forEach((p) => {
+                    ctx.save();
+                    ctx.globalAlpha = p.op;
+                    ctx.fillStyle = "#fff";
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+            }
+
+            function drawFinishParticles() {
+                finishParticles.forEach((p) => {
+                    ctx.save();
+                    ctx.globalAlpha = p.life / p.maxLife;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+            }
+
+            function spawnFinishBurst(x, y) {
+                const colors = ["#ffd700", "#4fc3f7", "#ef5350", "#66bb6a", "#fff", "#ff80ab"];
+                for (let i = 0; i < 50; i++) {
+                    const a = Math.random() * Math.PI * 2;
+                    const s = 2 + Math.random() * 6;
+                    finishParticles.push({
+                        x,
+                        y,
+                        vx: Math.cos(a) * s,
+                        vy: Math.sin(a) * s - 3,
+                        r: 2 + Math.random() * 4,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        life: 60 + Math.random() * 40,
+                        maxLife: 100
+                    });
+                }
+            }
+
+            function renderFrame(ts) {
+                if (!lastTimestamp) {
+                    lastTimestamp = ts;
+                }
+                const dt = Math.min((ts - lastTimestamp) / 1000, 0.05);
+                lastTimestamp = ts;
+
+                resizeCanvas();
+                const w = W();
+                const h = H();
+
+                drawMountainBg();
+                drawSnow();
+                trees.forEach(drawTree);
+                drawFlag(flagX);
+
+                if (trailPoints.length > 0) {
+                    drawTrail(trailPoints);
+                }
+
+                skiPos += (targetSkiPos - skiPos) * Math.min(1, dt * 6);
+                skiLean = (skiPos - lastPos) * 0.8;
+                lastPos = skiPos;
+
+                skiWobble = 0;
+
+                skiAirVel += 1.2;
+                skiAirY += skiAirVel * dt;
+                if (skiAirY > 0) {
+                    skiAirY = 0;
+                    skiAirVel = 0;
+                }
+
+                const displayX = 30 + (skiPos / 100) * (w - 60);
+                const groundY = slopeY(displayX);
+                if (gameActive && !finished) {
+                    trailPoints.push({ x: displayX, y: groundY });
+                    if (trailPoints.length > 60) {
+                        trailPoints.shift();
+                    }
+                }
+
+                drawSkier(displayX, groundY, skiLean + skiWobble, skiAirY);
+
+                snowParticles.forEach((p) => {
+                    p.x += p.vx + skiSpeed * 0.03;
+                    p.y += p.vy;
+                    if (p.y > h) {
+                        p.y = -5;
+                        p.x = Math.random() * w;
+                    }
+                    if (p.x > w) {
+                        p.x = 0;
+                    }
+                    if (p.x < 0) {
+                        p.x = w;
+                    }
+                });
+
+                finishParticles.forEach((p) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.18;
+                    p.life--;
+                });
+                finishParticles = finishParticles.filter((p) => p.life > 0);
+                drawFinishParticles();
+
+                frameId = requestAnimationFrame(renderFrame);
+            }
+
+            function startRun() {
+                const prompts = [...PROMPTS];
+                currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+                typedIndex = 0;
+                errors = 0;
+                totalTyped = 0;
+                skiPos = 0;
+                targetSkiPos = 0;
+                skiSpeed = 0;
+                skiAirY = 0;
+                skiAirVel = 0;
+                finished = false;
+                liveWpm = 0;
+                trailPoints = [];
+                finishParticles = [];
+                lastPos = 0;
+                skiLean = 0;
+                initTrees();
+                renderTextDisplay();
+                document.getElementById("type-input").value = "";
+                document.getElementById("type-input").disabled = false;
+                document.getElementById("type-input").focus();
+                document.getElementById("btn-start").textContent = "Restart";
+                document.getElementById("btn-next").disabled = true;
+                document.getElementById("progress-bar").style.width = "0%";
+                document.getElementById("finish-overlay").classList.remove("show");
+                document.getElementById("wpm-val").textContent = "0";
+                document.getElementById("ski-speed-val").textContent = "0";
+                gameActive = true;
+                startTime = Date.now();
+                lastTimestamp = 0;
+                clearInterval(wpmInterval);
+                wpmInterval = setInterval(updateLiveWpm, 500);
+            }
+
+            function renderTextDisplay() {
+                const el = document.getElementById("text-display");
+                const maxVisible = 96;
+                let windowStart = Math.max(0, typedIndex - 18);
+                let windowEnd = Math.min(currentPrompt.length, windowStart + maxVisible);
+                if (windowEnd - windowStart < maxVisible) {
+                    windowStart = Math.max(0, windowEnd - maxVisible);
+                }
+
+                let html = "";
+                if (windowStart > 0) {
+                    html += '<span class="char-pending">... </span>';
+                }
+                for (let i = windowStart; i < windowEnd; i++) {
+                    const ch = currentPrompt[i] === "<" ? "&lt;" : currentPrompt[i] === ">" ? "&gt;" : currentPrompt[i] === "&" ? "&amp;" : currentPrompt[i];
+                    if (i < typedIndex) {
+                        html += `<span class="char-done">${ch}</span>`;
+                    } else if (i === typedIndex && typedIndex < currentPrompt.length) {
+                        html += `<span class="char-current">${ch}</span>`;
+                    } else {
+                        html += `<span class="char-pending">${ch}</span>`;
+                    }
+                }
+                if (windowEnd < currentPrompt.length) {
+                    html += '<span class="char-pending"> ...</span>';
+                }
+                el.innerHTML = html;
+            }
+
+            function updateLiveWpm() {
+                if (!gameActive || finished) {
+                    return;
+                }
+                const elapsed = (Date.now() - startTime) / 1000 / 60;
+                if (elapsed > 0) {
+                    liveWpm = Math.round((typedIndex / 5) / elapsed);
+                    document.getElementById("wpm-val").textContent = liveWpm;
+                    skiSpeed = Math.min(liveWpm, 120);
+                    document.getElementById("ski-speed-val").textContent = Math.round(skiSpeed * 0.8);
+                }
+            }
+
+            function finishRun() {
+                gameActive = false;
+                finished = true;
+                clearInterval(wpmInterval);
+                document.getElementById("type-input").disabled = true;
+                document.getElementById("btn-next").disabled = false;
+
+                const elapsed = (Date.now() - startTime) / 1000;
+                const wpm = Math.round((currentPrompt.length / 5) / (elapsed / 60));
+                const acc = Math.round(((totalTyped - errors) / Math.max(1, totalTyped)) * 100);
+                totalRuns++;
+                localStorage.setItem("skitype_runs", totalRuns);
+                document.getElementById("stat-runs").textContent = totalRuns;
+
+                const entry = { time: elapsed, wpm, acc, date: Date.now() };
+                records.push(entry);
+                records.sort((a, b) => a.time - b.time);
+                records = records.slice(0, 3);
+                localStorage.setItem("skitype_records", JSON.stringify(records));
+
+                document.getElementById("f-time-val").textContent = `${elapsed.toFixed(2)}s`;
+                document.getElementById("f-wpm-val").textContent = `${wpm} WPM  |  ${acc}% accuracy`;
+                document.getElementById("f-record-msg").textContent = records.indexOf(entry) === 0 ? "NEW PERSONAL RECORD!" : "";
+                document.getElementById("finish-overlay").classList.add("show");
+
+                document.getElementById("stat-last").textContent = `${elapsed.toFixed(2)}s`;
+                document.getElementById("stat-wpm").textContent = wpm;
+                document.getElementById("stat-acc").textContent = `${acc}%`;
+                document.getElementById("stat-record").textContent = records[0] ? `${records[0].time.toFixed(2)}s` : "--";
+
+                spawnFinishBurst(W() - 30, H() * 0.5);
+                setTimeout(() => spawnFinishBurst(W() - 30, H() * 0.5), 400);
+                renderLeaderboard();
+            }
+
+            function renderLeaderboard() {
+                const list = document.getElementById("lb-list");
+                if (records.length === 0) {
+                    list.innerHTML = '<div style="color:rgba(255,255,255,0.25);font-size:13px;padding:8px 4px;">No runs yet. Hit Start to begin!</div>';
+                    return;
+                }
+                const rankLabels = ["1st", "2nd", "3rd"];
+                const rankClasses = ["gold", "silver", "bronze"];
+                list.innerHTML = records.map((r, i) => {
+                    const label = i < 3 ? rankLabels[i] : `${i + 1}th`;
+                    const cls = i < 3 ? rankClasses[i] : "";
+                    const isNew = Date.now() - r.date < 3000;
+                    return `<div class="lb-row">
+      <div class="lb-rank ${cls}">${label}</div>
+      <div class="lb-time">${r.time.toFixed(2)}s</div>
+      <div class="lb-acc">${r.acc}%</div>
+      <div class="lb-wpm">${r.wpm} wpm${isNew ? '<span class="lb-new">NEW</span>' : ""}</div>
+    </div>`;
+                }).join("");
+                document.getElementById("stat-record").textContent = `${records[0].time.toFixed(2)}s`;
+            }
+
+            document.getElementById("type-input").addEventListener("input", function () {
+                if (!gameActive || finished) {
+                    return;
+                }
+                const val = this.value;
+                if (val.length === 0) {
+                    return;
+                }
+                const lastChar = val[val.length - 1];
+                const expected = currentPrompt[typedIndex];
+                totalTyped++;
+                if (lastChar === expected) {
+                    typedIndex++;
+                    targetSkiPos = (typedIndex / currentPrompt.length) * 100;
+                    if (typedIndex % 8 === 0) {
+                        skiAirVel = -3;
+                    }
+                } else {
+                    errors++;
+                    this.style.borderColor = "#ef5350";
+                    setTimeout(() => {
+                        this.style.borderColor = "";
+                    }, 300);
+                }
+                this.value = "";
+                const pct = (typedIndex / currentPrompt.length) * 100;
+                document.getElementById("progress-bar").style.width = `${pct}%`;
+                renderTextDisplay();
+                if (typedIndex >= currentPrompt.length) {
+                    finishRun();
+                }
+            });
+
+            document.getElementById("btn-start").addEventListener("click", startRun);
+            document.getElementById("btn-next").addEventListener("click", () => {
+                document.getElementById("finish-overlay").classList.remove("show");
+                startRun();
+            });
+
+            initSnow();
+            initTrees();
+            renderTextDisplay();
+            renderLeaderboard();
+            document.getElementById("stat-runs").textContent = totalRuns;
+            if (records.length > 0) {
+                document.getElementById("stat-record").textContent = `${records[0].time.toFixed(2)}s`;
+            }
+            requestAnimationFrame(renderFrame);
+        </script>
         <div class="text-center py-3">
             <a class="back-to-top" href="#page-top">Back to top</a>
         </div>
